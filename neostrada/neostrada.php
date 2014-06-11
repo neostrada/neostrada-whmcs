@@ -180,6 +180,7 @@ function neostrada_TransferDomain($params)
 			'domain'	=> $params['sld'],
 			'extension'	=> $params['tld'],
 			'authcode'	=> $params['transfersecret'],
+			'holderid'	=> (int)$HolderResult['holderid'],
 			'webip'		=> '',
 			'ns1'		=> $params['ns1'],
 			'ns2'		=> $params['ns2'],
