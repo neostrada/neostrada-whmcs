@@ -56,7 +56,8 @@ function neostrada_api($Action, array $Parameters = array())
 	if (($cURL = curl_init()) !== FALSE) {
 		curl_setopt($cURL, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_setopt($cURL, CURLOPT_SSL_VERIFYHOST, 0);
-		curl_setopt($cURL, CURLOPT_URL, API_HOST.'?api_key='.API_KEY.'&action='.$Action.'&'.http_build_query($Parameters).'&api_sig='.neostrada_apisignature($Action, $Parameters).'&referer=WHMCS');
+        curl_setopt($cURL, CURLOPT_SSLVERSION, 1);
+        curl_setopt($cURL, CURLOPT_URL, API_HOST.'?api_key='.API_KEY.'&action='.$Action.'&'.http_build_query($Parameters).'&api_sig='.neostrada_apisignature($Action, $Parameters).'&referer=WHMCS');
 		curl_setopt($cURL, CURLOPT_HEADER, 0);
 		curl_setopt($cURL, CURLOPT_RETURNTRANSFER, 1);
 		if (($Data = curl_exec($cURL)) !== FALSE) {
