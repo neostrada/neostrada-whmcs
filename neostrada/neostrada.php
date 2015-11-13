@@ -63,10 +63,10 @@ function neostrada_GetNameservers($params)
 			if (array_key_exists(1, $Result['nameservers'])) $RV['ns2'] = $Result['nameservers'][1];
 			if (array_key_exists(2, $Result['nameservers'])) $RV['ns3'] = $Result['nameservers'][2];
 		} else {
-			$RV['error'] = '[NEOSTRADA] Could not get nameservers for domain';
+			$RV['error'] = 'Could not get nameservers for domain';
 		}
 	} else {
-		$RV['error'] = '[NEOSTRADA] Could not connect to server or could not parse result, try again later';
+		$RV['error'] = 'Could not connect to server or could not parse result, try again later';
 	}
 	return $RV;
 }
@@ -84,10 +84,10 @@ function neostrada_SaveNameservers($params)
 		'ns3'		=> $params['ns3']
 	))) !== FALSE) {
 		if ((int)$Result['code'] !== 200) {
-			$RV['error'] = '[NEOSTRADA] Could not save nameservers for domain';
+			$RV['error'] = 'Could not save nameservers for domain';
 		}
 	} else {
-		$RV['error'] = '[NEOSTRADA] Could not connect to server or could not parse result, try again later';
+		$RV['error'] = 'Could not connect to server or could not parse result, try again later';
 	}
 	return $RV;
 }
@@ -103,10 +103,10 @@ function neostrada_SaveRegistrarLock($params)
 		'lock'		=> ($params['lockenabled'] ? 1 : 0)
 	))) !== FALSE) {
 		if ((int)$Result['code'] !== 200) {
-			$RV['error'] = '[NEOSTRADA] Domain locking not supported for this extension';
+			$RV['error'] = 'Domain locking not supported for this extension';
 		}
 	} else {
-		$RV['error'] = '[NEOSTRADA] Could not connect to server or could not parse result, try again later';
+		$RV['error'] = 'Could not connect to server or could not parse result, try again later';
 	}
 	return $RV;
 }
@@ -143,16 +143,16 @@ function neostrada_RegisterDomain($params)
 				'ns3'		=> $params['ns3']
 			))) !== FALSE) {
 				if ((int)$Result['code'] !== 200) {
-					$RV['error'] = '[NEOSTRADA] Could not register domain';
+					$RV['error'] = 'Could not register domain';
 				}
 			} else {
-				$RV['error'] = '[NEOSTRADA] Could not connect to server or could not parse result, try again later';
+				$RV['error'] = 'Could not connect to server or could not parse result, try again later';
 			}
 		} else {
-			$RV['error'] = '[NEOSTRADA] Could not create contact';
+			$RV['error'] = 'Could not create contact';
 		}
 	} else {
-		$RV['error'] = '[NEOSTRADA] Could not connect to server or could not parse result, try again later';
+		$RV['error'] = 'Could not connect to server or could not parse result, try again later';
 	}
 	return $RV;
 }
@@ -187,14 +187,14 @@ function neostrada_TransferDomain($params)
 			'ns3'		=> $params['ns3']
 		))) !== FALSE) {
 			if ((int)$Result['code'] !== 200) {
-				$RV['error'] = '[NEOSTRADA] Could not transfer domain';
+				$RV['error'] = 'Could not transfer domain';
 			}
-			if ((int)$Result['code'] === 504) $RV['error'] = '[NEOSTRADA] Auth token missing';
+			if ((int)$Result['code'] === 504) $RV['error'] = 'Auth token missing';
 		} else {
-			$RV['error'] = '[NEOSTRADA] Could not connect to server or could not parse result, try again later';
+			$RV['error'] = 'Could not connect to server or could not parse result, try again later';
 		}
 	} else {
-		$RV['error'] = '[NEOSTRADA] Could not connect to server or could not parse result, try again later';
+		$RV['error'] = 'Could not connect to server or could not parse result, try again later';
 	}
 	return $RV;
 }
@@ -225,16 +225,16 @@ function neostrada_SaveContactDetails($params)
 				'holderid'	=> (int)$HolderResult['holderid']
 			))) !== FALSE) {
 				if ((int)$Result['code'] !== 200) {
-					$RV['error'] = '[NEOSTRADA] Could not modify domain';
+					$RV['error'] = 'Could not modify domain';
 				}
 			} else {
-				$RV['error'] = '[NEOSTRADA] Could not connect to server or could not parse result, try again later';
+				$RV['error'] = 'Could not connect to server or could not parse result, try again later';
 			}
 		} else {
-			$RV['error'] = '[NEOSTRADA] Could not create contact';
+			$RV['error'] = 'Could not create contact';
 		}
 	} else {
-		$RV['error'] = '[NEOSTRADA] Could not connect to server or could not parse result, try again later';
+		$RV['error'] = 'Could not connect to server or could not parse result, try again later';
 	}
 	return $RV;
 }
@@ -251,10 +251,10 @@ function neostrada_GetEPPCode($params)
 		if ((int)$Result['code'] === 200) {
 			if (strlen($Result['token']) > 0) $RV['eppcode'] = $Result['token'];
 		} else {
-			$RV['error'] = '[NEOSTRADA] Domain auth token not set or not supported';
+			$RV['error'] = 'Domain auth token not set or not supported';
 		}
 	} else {
-		$RV['error'] = '[NEOSTRADA] Could not connect to server or could not parse result, try again later';
+		$RV['error'] = 'Could not connect to server or could not parse result, try again later';
 	}
 	return $RV;
 }
