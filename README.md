@@ -4,6 +4,7 @@
 # Neostrada WHMCS plugin #
 
 Easily connect WHMCS to the Neostrada API using the Neostrada WHMCS plugin and your [API credentials](https://www.neostrada.nl/mijn-account/api.html) to automatically register and manage domainnames.
+If you are using the new updated version of WHMCS than you need to upload the directory neostrada_V2.0 into modules/registrars of your WHMCS. You do not need to download the neostrada directory viewed above.
 
 ## Installation ##
 Download the [Neostrada WHMCS plugin](https://github.com/neostrada/neostrada-whmcs/archive/master.zip) or checkout the repository and include the plugin in your WHMCS and follow the setup instructions.
