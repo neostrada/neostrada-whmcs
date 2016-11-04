@@ -51,3 +51,10 @@ fabric.properties
 # modules.xml
 # .idea/misc.xml 
 # *.ipr
+.idea/.name
+.idea/encodings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/neostrada-whmcs.iml
+.idea/vcs.xml
+.idea/copyright/profiles_settings.xml
