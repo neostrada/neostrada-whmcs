@@ -29,7 +29,10 @@
  * @copyright   Avot Media BV
  * @link        http://www.avot.nl / http://www.neostrada.nl
  */
+
+// Define the API endpoint.
 define('API_HOST', 'https://api.neostrada.nl/');
+
 /**
  * Neostrada :: getConfigArray
  */
@@ -38,7 +41,7 @@ function neostrada_getConfigArray()
 	return array(
 		'Username'			=> array(
 			'Type'			=> 'text',
-			'Size'			=> '20',
+			'Size'			=> '40',
 			'Description'	=> 'Enter your Neostrada API key'
 		),
 		'Password'			=> array(
@@ -48,6 +51,54 @@ function neostrada_getConfigArray()
 		)
 	);
 }
+
+/**
+ * Neostrada :: RequestDelete
+ */
+function neostrada_RequestDelete($params)
+{
+    $RV = array();
+	if (($Result = neostrada_api($params['Username'], $params['Password'], 'delete', array(
+		'domain'	=> $params['sld'],
+		'extension'	=> $params['tld']
+	))) !== FALSE) {
+		if ((int)$Result['code'] !== 200) {
+			$RV['error'] = 'Could not request deletion for domain';
+		}
+	} else {
+		$RV['error'] = 'Could not connect to server or could not parse result, try again later';
+	}
+	return $RV;
+}
+
+/**
+ * Neostrada :: Sync
+ */
+function neostrada_Sync($params)
+{
+    $RV = array();
+	if (($Result = neostrada_api($params['Username'], $params['Password'], 'getexpirationdate', array(
+		'domain'	=> $params['sld'],
+		'extension'	=> $params['tld']
+	))) !== FALSE) {
+		if ((int)$Result['code'] === 200) {
+			if (strlen($Result['expirationdate']) > 0) {
+                $date = strtotime($Result['expirationdate']);
+                
+                // Check if the domain expired or not.
+                if ($date > time()) {
+                    $RV['active'] = true;
+                } else {
+                    $RV['expired'] = true;
+                }
+                
+                $RV['expirydate'] = $Result['expirationdate'];
+            }
+		}
+	}
+	return $RV;
+}
+
 /**
  * Neostrada :: GetNameservers
  */
@@ -70,6 +121,7 @@ function neostrada_GetNameservers($params)
 	}
 	return $RV;
 }
+
 /**
  * Neostrada :: SaveNameservers
  */
@@ -91,6 +143,7 @@ function neostrada_SaveNameservers($params)
 	}
 	return $RV;
 }
+
 /**
  * Neostrada :: SaveRegistrarLock
  */
@@ -110,6 +163,7 @@ function neostrada_SaveRegistrarLock($params)
 	}
 	return $RV;
 }
+
 /**
  * Neostrada :: RegisterDomain
  */
@@ -156,6 +210,7 @@ function neostrada_RegisterDomain($params)
 	}
 	return $RV;
 }
+
 /**
  * Neostrada :: TransferDomain
  */
@@ -198,6 +253,7 @@ function neostrada_TransferDomain($params)
 	}
 	return $RV;
 }
+
 /**
  * Neostrada :: SaveContactDetails
  */
@@ -238,6 +294,7 @@ function neostrada_SaveContactDetails($params)
 	}
 	return $RV;
 }
+
 /**
  * Neostrada :: GetEPPCode
  */
@@ -258,6 +315,7 @@ function neostrada_GetEPPCode($params)
 	}
 	return $RV;
 }
+
 /**
  * Neostrada :: api
  */
@@ -287,6 +345,7 @@ function neostrada_api($Username, $Password, $Action, array $Parameters = array(
 	}
 	return $RV;
 }
+
 /**
  * Neostrada :: apisignature
  */
