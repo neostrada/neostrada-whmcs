@@ -89,7 +89,7 @@ function neostrada_apisignature($Action, array $Parameters = array())
 /**
  * Execute whois
  */
-if (array_key_exists('domain', $_GET) && strlen($_GET['domain']) > 0 && $_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
+if (array_key_exists('domain', $_GET) && strlen($_GET['domain']) > 0) {
 	echo (neostrada_whois(filter_var($_GET['domain'], FILTER_SANITIZE_URL)) ? 'free' : 'registered');
 }
 exit;
