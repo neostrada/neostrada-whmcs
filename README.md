@@ -25,7 +25,7 @@ Edit the file `neostrada_whois.php` and replace your API key and secret with `[y
 
 ### Step 2
 #### WHMCS 7.X or later
-If you're using WHMCS 7 or later, download the file `/resources/domains/dist.whois.json` from your hosting account. Search for the extesions you want to check and remove them from the file. Then edit the file and put the code below on top, after `[`.
+If you're using WHMCS 7 or later, download the file `/resources/domains/dist.whois.json` from your hosting account. Search for the extensions you want to check and remove them from the file. Then edit the file and put the code below on top, after `[`.
 
 ```
 {
