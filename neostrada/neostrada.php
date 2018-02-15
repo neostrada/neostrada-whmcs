@@ -76,27 +76,52 @@ function neostrada_RequestDelete($params)
  */
 function neostrada_Sync($params)
 {
-    $RV = array();
-	if (($Result = neostrada_api($params['Username'], $params['Password'], 'getexpirationdate', array(
-		'domain'	=> $params['sld'],
-		'extension'	=> $params['tld']
-	))) !== FALSE) {
-		if ((int)$Result['code'] === 200) {
-			if (strlen($Result['expirationdate']) > 0) {
-                $date = strtotime($Result['expirationdate']);
-                
-                // Check if the domain expired or not.
-                if ($date > time()) {
-                    $RV['active'] = true;
-                } else {
-                    $RV['expired'] = true;
+    // Get the domain status. 1 is active, 0 is not active
+    $statusResponse = neostrada_api($params['Username'], $params['Password'], 'getstatus', [
+        'domain' => $params['sld'],
+        'extension' => $params['tld']
+    ]);
+
+    $rc = [];
+    if ($statusResponse !== false) {
+        if ((int) $statusResponse['code'] === 200) {
+            $active = $statusResponse['status'] == '1' ? true : false;
+
+            // Get the expiration date
+            $dateResponse = neostrada_api($params['Username'], $params['Password'], 'getexpirationdate', [
+                'domain' => $params['sld'],
+                'extension' => $params['tld']
+            ]);
+
+            if ($dateResponse !== false) {
+                if ((int) $dateResponse['code'] === 200) {
+                    if (strlen($dateResponse['expirationdate']) > 0) {
+                        // Check if the domain has reached its expiration date, but only if it's still active
+                        if ($active) {
+                            $date = strtotime($dateResponse['expirationdate']);
+
+                            if ($date <= time()) {
+                                $rc['expired'] = true;
+                            } else {
+                                $rc['active'] = true;
+                            }
+                        }
+
+                        // Set the expiration date
+                        $rc['expirydate'] = $dateResponse['expirationdate'];
+                    }
                 }
-                
-                $RV['expirydate'] = $Result['expirationdate'];
             }
-		}
-	}
-	return $RV;
+
+            // Check if the domain is still active
+            if (!$active) {
+                $rc['expired'] = true;
+            } else {
+                $rc['active'] = true;
+            }
+        }
+    }
+    return $rc;
 }
 
 /**
