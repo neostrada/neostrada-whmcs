@@ -76,6 +76,17 @@ function neostrada_RequestDelete($params)
  */
 function neostrada_Sync($params)
 {
+    $result = localAPI('GetClientsDomains', ['domainid' => $params['domainid']]);
+
+    if (isset($result['domains']['domain'][0]['domainname']) && $result['domains']['domain'][0]['domainname'] == $params['domain']) {
+        $domain = $result['domains']['domain'][0];
+
+        $autoRenew = true;
+        if (isset($domain['donotrenew']) && $domain['donotrenew'] == true) {
+            $autoRenew = false;
+        }
+    }
+
     // Get the domain status. 1 is active, 0 is not active
     $statusResponse = neostrada_api($params['Username'], $params['Password'], 'getstatus', [
         'domain' => $params['sld'],
@@ -87,37 +98,55 @@ function neostrada_Sync($params)
         if ((int) $statusResponse['code'] === 200) {
             $active = $statusResponse['status'] == '1' ? true : false;
 
-            // Get the expiration date
-            $dateResponse = neostrada_api($params['Username'], $params['Password'], 'getexpirationdate', [
-                'domain' => $params['sld'],
-                'extension' => $params['tld']
-            ]);
+            if ($active && isset($autoRenew) && !$autoRenew) {
+                // Delete domain when auto renew is disabled, but domain is still active
+                neostrada_api($params['Username'], $params['Password'], 'delete', [
+                    'domain' => $params['sld'],
+                    'extension' => $params['tld']
+                ]);
+            } elseif (!$active && isset($autoRenew) && $autoRenew) {
+                // Undelete domain when auto renew is enabled, but domain isn't active
+                $undeleteDomain = neostrada_api($params['Username'], $params['Password'], 'undelete', [
+                    'domain' => $params['sld'],
+                    'extension' => $params['tld']
+                ]);
 
-            if ($dateResponse !== false) {
-                if ((int) $dateResponse['code'] === 200) {
-                    if (strlen($dateResponse['expirationdate']) > 0) {
-                        // Check if the domain has reached its expiration date, but only if it's still active
-                        if ($active) {
-                            $date = strtotime($dateResponse['expirationdate']);
+                if ($undeleteDomain !== false && (int) $undeleteDomain['code'] === 200) {
+                    $rc['active'] = true;
+                }
+            } else {
+                // Get the expiration date
+                $dateResponse = neostrada_api($params['Username'], $params['Password'], 'getexpirationdate', [
+                    'domain' => $params['sld'],
+                    'extension' => $params['tld']
+                ]);
 
-                            if ($date <= time()) {
-                                $rc['expired'] = true;
-                            } else {
-                                $rc['active'] = true;
+                if ($dateResponse !== false) {
+                    if ((int) $dateResponse['code'] === 200) {
+                        if (strlen($dateResponse['expirationdate']) > 0) {
+                            // Check if the domain has reached its expiration date, but only if it's still active
+                            if ($active) {
+                                $date = strtotime($dateResponse['expirationdate']);
+
+                                if ($date <= time()) {
+                                    $rc['expired'] = true;
+                                } else {
+                                    $rc['active'] = true;
+                                }
                             }
-                        }
 
-                        // Set the expiration date
-                        $rc['expirydate'] = $dateResponse['expirationdate'];
+                            // Set the expiration date
+                            $rc['expirydate'] = $dateResponse['expirationdate'];
+                        }
                     }
                 }
-            }
 
-            // Check if the domain is still active
-            if (!$active) {
-                $rc['expired'] = true;
-            } else {
-                $rc['active'] = true;
+                // Check if the domain is still active
+                if (!$active) {
+                    $rc['expired'] = true;
+                } else {
+                    $rc['active'] = true;
+                }
             }
         }
     }
