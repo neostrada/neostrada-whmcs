@@ -1,6 +1,3 @@
-![Neostrada](https://www.neostrada.nl/asset/nx/images/logo.png) 
-=================
-
 # Neostrada WHMCS module
 
 Easily connect WHMCS to the Neostrada API using the Neostrada WHMCS plugin and your [API credentials](https://www.neostrada.nl/mijn-account/api.html) to automatically register and manage domains.
@@ -21,7 +18,7 @@ Go to 'Setup > Products/Services > Domain Pricing'. Enter the extensions you wan
 WHMCS uses pre-defined WHOIS servers by default. If you want to use the Neostrada API to perform domain availability checks, follow the steps below.
 
 ### Step 1
-Edit the file `neostrada_whois.php` and replace your API key and secret with `[your_apikey]` and `[your_apisecrey]` respectively. Upload the file to the directory where WHMCS is installed.
+Edit the file `neostrada_whois.php` and replace your API key and secret with `[your_apikey]` and `[your_apisecret]` respectively. Upload the file to the directory where WHMCS is installed.
 
 ### Step 2
 #### WHMCS 7.X or later
