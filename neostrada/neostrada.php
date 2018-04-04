@@ -146,14 +146,6 @@ function neostrada_Sync($params)
                 // Set the expiration date
                 $rc['expirydate'] = $expirationDate;
             }
-
-            // Check if the domain is still active
-            // We do this again, just in case $expirationDate and $domainExpired aren't set
-            if ($active) {
-                $rc['active'] = true;
-            } else {
-                $rc['expired'] = true;
-            }
         }
     } elseif (isset($expirationDate) && isset($domainExpired)) {
         if ($domainExpired) {
