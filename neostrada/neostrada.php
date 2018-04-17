@@ -242,6 +242,7 @@ function neostrada_RegisterDomain($params)
 		'zipcode'		=> $params['postcode'],
 		'city'			=> $params['city'],
 		'country'		=> strtolower($params['country']),
+		'phone'         => $params['phonenumber'],
 		'email'			=> $params['email']
 	))) !== FALSE) {
 		if ((int)$HolderResult['code'] === 200) {
@@ -289,6 +290,7 @@ function neostrada_TransferDomain($params)
 		'zipcode'		=> $params['postcode'],
 		'city'			=> $params['city'],
 		'country'		=> strtolower($params['country']),
+        'phone'         => $params['phonenumber'],
 		'email'			=> $params['email']
 	))) !== FALSE) {
 		if (($Result = neostrada_api($params['Username'], $params['Password'], 'transfer2', array(
@@ -332,6 +334,7 @@ function neostrada_SaveContactDetails($params)
 		'zipcode'		=> $params["contactdetails"]["Registrant"]["ZIP Code"],
 		'city'			=> $params["contactdetails"]["Registrant"]["City"],
 		'country'		=> strtolower($params["contactdetails"]["Registrant"]["Country"]),
+		'phone'         => $params["contactdetails"]["Registrant"]["Telephone"],
 		'email'			=> $params["contactdetails"]["Registrant"]["Email Address"]
 	))) !== FALSE) {
 		if ((int)$HolderResult['code'] === 200) {
