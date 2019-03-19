@@ -1,3 +1,7 @@
+## This repository is abandoned
+
+This repository is abandoned because of the release of a new version of our WHMCS module (https://github.com/neostrada/whmcs).
+
 # Neostrada WHMCS module
 
 Easily connect WHMCS to the Neostrada API using the Neostrada WHMCS plugin and your [API credentials](https://www.neostrada.nl/mijn-account/api.html) to automatically register and manage domains.
